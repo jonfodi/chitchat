@@ -1,0 +1,939 @@
+{
+  "flight_id": "flight_20250728_215605",
+  "generated_timestamp": "20250728_215605",
+  "message_types": {
+    "AHR2": {
+      "message_type": "AHR2",
+      "description": "Attitude and heading reference data containing roll, pitch, yaw angles, altitude, position coordinates, and quaternion values for aircraft orientation",
+      "data_points": 3910,
+      "time_range": {
+        "start_ms": 74656.972,
+        "end_ms": 231016.881,
+        "duration_ms": 156359.90899999999
+      },
+      "fields": {
+        "Roll": {
+          "description": "Roll angle in radians",
+          "units": "rad",
+          "min": -0.62,
+          "max": -0.61,
+          "mean": -0.613164,
+          "std_dev": 0.004651
+        },
+        "Pitch": {
+          "description": "Pitch angle in radians",
+          "units": "rad",
+          "min": -0.47,
+          "max": -0.44,
+          "mean": -0.456072,
+          "std_dev": 0.006752
+        },
+        "Yaw": {
+          "description": "Yaw angle in radians",
+          "units": "rad",
+          "min": 0.2,
+          "max": 0.39,
+          "mean": 0.31598,
+          "std_dev": 0.041976
+        },
+        "Alt": {
+          "description": "Altitude relative to home position",
+          "units": "m",
+          "min": -1.14,
+          "max": 124.259995,
+          "mean": 26.285217,
+          "std_dev": 50.810843
+        },
+        "Lat": {
+          "description": "Latitude coordinate",
+          "units": "deg",
+          "min": 0.0,
+          "max": 391865455.0,
+          "mean": 283313021.978517,
+          "std_dev": 175354881.738675
+        },
+        "Lng": {
+          "description": "Longitude coordinate",
+          "units": "deg",
+          "min": -768271305.0,
+          "max": 0.0,
+          "mean": -555465288.927366,
+          "std_dev": 343801881.519286
+        },
+        "Q1": {
+          "description": "Quaternion component 1 (w)",
+          "units": "unitless",
+          "min": 0.999971,
+          "max": 0.999976,
+          "mean": 0.999973,
+          "std_dev": 1e-06
+        },
+        "Q2": {
+          "description": "Quaternion component 2 (x)",
+          "units": "unitless",
+          "min": -0.00548,
+          "max": -0.005314,
+          "mean": -0.005389,
+          "std_dev": 2.5e-05
+        },
+        "Q3": {
+          "description": "Quaternion component 3 (y)",
+          "units": "unitless",
+          "min": -0.004182,
+          "max": -0.003886,
+          "mean": -0.004037,
+          "std_dev": 5.1e-05
+        },
+        "Q4": {
+          "description": "Quaternion component 4 (z)",
+          "units": "unitless",
+          "min": 0.001774,
+          "max": 0.003389,
+          "mean": 0.002767,
+          "std_dev": 0.000365
+        }
+      }
+    },
+    "ATT": {
+      "message_type": "ATT",
+      "description": "Attitude data containing roll, pitch, and yaw angles",
+      "data_points": 90348,
+      "time_range": {
+        "start_ms": 5155.851,
+        "end_ms": 231024.128,
+        "duration_ms": 225868.277
+      },
+      "fields": {
+        "DesRoll": {
+          "description": "Desired roll angle in radians",
+          "units": "rad",
+          "min": 0.0,
+          "max": 0.1,
+          "mean": 0.000131,
+          "std_dev": 0.002685
+        },
+        "Roll": {
+          "description": "Roll angle in radians",
+          "units": "rad",
+          "min": -0.7,
+          "max": -0.47,
+          "mean": -0.597513,
+          "std_dev": 0.033927
+        },
+        "DesPitch": {
+          "description": "Desired pitch angle in radians",
+          "units": "rad",
+          "min": 0.0,
+          "max": 0.42,
+          "mean": 0.007481,
+          "std_dev": 0.012099
+        },
+        "Pitch": {
+          "description": "Pitch angle in radians",
+          "units": "rad",
+          "min": -0.44,
+          "max": 0.1,
+          "mean": -0.134049,
+          "std_dev": 0.169044
+        },
+        "DesYaw": {
+          "description": "Desired yaw angle in radians",
+          "units": "rad",
+          "min": 0.0,
+          "max": 359.99,
+          "mean": 112.476103,
+          "std_dev": 166.776534
+        },
+        "Yaw": {
+          "description": "Yaw angle in radians",
+          "units": "rad",
+          "min": 0.0,
+          "max": 359.99,
+          "mean": 108.067515,
+          "std_dev": 164.926803
+        },
+        "ErrRP": {
+          "description": "Data field ErrRP",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 1.0,
+          "mean": 0.004173,
+          "std_dev": 0.047702
+        },
+        "ErrYaw": {
+          "description": "Data field ErrYaw",
+          "units": "unknown",
+          "min": 1.0,
+          "max": 1.0,
+          "mean": 1.0,
+          "std_dev": 0.0
+        },
+        "AEKF": {
+          "description": "Data field AEKF",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 3.0,
+          "mean": 2.077368,
+          "std_dev": 1.38443
+        }
+      },
+      "control_performance": {
+        "roll": {
+          "control_errors": {
+            "rms_error": 0.59859,
+            "correlation": 0.143662
+          },
+          "rate_statistics": {
+            "std_dev_rate": 0.781885
+          },
+          "stability": {
+            "actual_std_dev": 0.033927
+          }
+        },
+        "pitch": {
+          "control_errors": {
+            "rms_error": 0.217034,
+            "correlation": 0.403197
+          },
+          "rate_statistics": {
+            "std_dev_rate": 1.107186
+          },
+          "stability": {
+            "actual_std_dev": 0.169044
+          }
+        },
+        "yaw": {
+          "control_errors": {
+            "rms_error": 39.829856,
+            "correlation": 0.971578
+          },
+          "rate_statistics": {
+            "std_dev_rate": 5993.150578
+          },
+          "stability": {
+            "actual_std_dev": 164.926803
+          }
+        },
+        "overall_assessment": {
+          "control_quality": "POOR",
+          "avg_rms_error": 13.548493,
+          "avg_correlation": 0.506146
+        }
+      }
+    },
+    "GPS[0]": {
+      "message_type": "GPS[0]",
+      "description": "Global positioning system data including latitude, longitude, altitude, and accuracy metrics from GPS sensor 0",
+      "data_points": 787,
+      "time_range": {
+        "start_ms": 73816.825,
+        "end_ms": 230956.867,
+        "duration_ms": 157140.04200000002
+      },
+      "fields": {
+        "I": {
+          "description": "Data field I",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "Status": {
+          "description": "Data field Status",
+          "units": "unknown",
+          "min": 1.0,
+          "max": 3.0,
+          "mean": 1.932656,
+          "std_dev": 0.698001
+        },
+        "GMS": {
+          "description": "Data field GMS",
+          "units": "unknown",
+          "min": 7800.0,
+          "max": 225899400.0,
+          "mean": 223812997.359593,
+          "std_dev": 21201749.212574
+        },
+        "GWk": {
+          "description": "Data field GWk",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "NSats": {
+          "description": "Data field NSats",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 5.0,
+          "mean": 2.484117,
+          "std_dev": 1.671402
+        },
+        "HDop": {
+          "description": "Horizontal dilution of precision",
+          "units": "unitless",
+          "min": 3.12,
+          "max": 99.99,
+          "mean": 42.23906,
+          "std_dev": 37.157981
+        },
+        "Lat": {
+          "description": "Latitude coordinate",
+          "units": "deg",
+          "min": 0.0,
+          "max": 391865455.0,
+          "mean": 289983023.011436,
+          "std_dev": 166405399.61369
+        },
+        "Lng": {
+          "description": "Longitude coordinate",
+          "units": "deg",
+          "min": -768271305.0,
+          "max": 0.0,
+          "mean": -570745309.475222,
+          "std_dev": 324549833.698176
+        },
+        "Alt": {
+          "description": "Altitude relative to home position",
+          "units": "m",
+          "min": -17.0,
+          "max": 1447.98,
+          "mean": 160.926658,
+          "std_dev": 301.658587
+        },
+        "Spd": {
+          "description": "Data field Spd",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.822,
+          "mean": 0.178135,
+          "std_dev": 0.211563
+        },
+        "GCrs": {
+          "description": "Data field GCrs",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 229.908096,
+          "mean": 115.206496,
+          "std_dev": 82.991943
+        },
+        "VZ": {
+          "description": "Data field VZ",
+          "units": "unknown",
+          "min": -0.113,
+          "max": 0.362,
+          "mean": 0.00206,
+          "std_dev": 0.031757
+        },
+        "Yaw": {
+          "description": "Yaw angle in radians",
+          "units": "rad",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "U": {
+          "description": "Data field U",
+          "units": "unknown",
+          "min": 1.0,
+          "max": 1.0,
+          "mean": 1.0,
+          "std_dev": 0.0
+        }
+      },
+      "gps_performance": {
+        "accuracy_performance": {
+          "good_accuracy_ratio": 0.212198,
+          "avg_hdop": 42.23906
+        }
+      }
+    },
+    "POS": {
+      "message_type": "POS",
+      "description": "Position data containing coordinates and altitude",
+      "data_points": 831,
+      "time_range": {
+        "start_ms": 197817.009,
+        "end_ms": 231016.889,
+        "duration_ms": 33199.880000000005
+      },
+      "fields": {
+        "Lat": {
+          "description": "Latitude coordinate",
+          "units": "deg",
+          "min": 391847745.0,
+          "max": 391848545.0,
+          "mean": 391848219.176895,
+          "std_dev": 255.877013
+        },
+        "Lng": {
+          "description": "Longitude coordinate",
+          "units": "deg",
+          "min": -768259331.0,
+          "max": -768259005.0,
+          "mean": -768259228.415162,
+          "std_dev": 97.976149
+        },
+        "Alt": {
+          "description": "Altitude relative to home position",
+          "units": "m",
+          "min": 123.699997,
+          "max": 124.259995,
+          "mean": 124.010779,
+          "std_dev": 0.120961
+        },
+        "RelHomeAlt": {
+          "description": "Data field RelHomeAlt",
+          "units": "unknown",
+          "min": 123.699997,
+          "max": 124.259995,
+          "mean": 124.010779,
+          "std_dev": 0.120961
+        }
+      }
+    },
+    "XKQ[0]": {
+      "message_type": "XKQ[0]",
+      "description": "Extended Kalman Filter quaternion data from instance 0",
+      "data_points": 5623,
+      "time_range": {
+        "start_ms": 6135.644,
+        "end_ms": 231016.206,
+        "duration_ms": 224880.562
+      },
+      "fields": {
+        "C": {
+          "description": "Data field C",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "Q1": {
+          "description": "Quaternion component 1 (w)",
+          "units": "unitless",
+          "min": 0.99999,
+          "max": 1.0,
+          "mean": 0.999995,
+          "std_dev": 4e-06
+        },
+        "Q2": {
+          "description": "Quaternion component 2 (x)",
+          "units": "unitless",
+          "min": -0.003375,
+          "max": 0.0,
+          "mean": -0.002284,
+          "std_dev": 0.001512
+        },
+        "Q3": {
+          "description": "Quaternion component 3 (y)",
+          "units": "unitless",
+          "min": 0.0,
+          "max": 0.002938,
+          "mean": 0.001524,
+          "std_dev": 0.001013
+        },
+        "Q4": {
+          "description": "Quaternion component 4 (z)",
+          "units": "unitless",
+          "min": -0.000422,
+          "max": 0.000118,
+          "mean": -5.9e-05,
+          "std_dev": 0.000131
+        }
+      }
+    },
+    "XKQ[1]": {
+      "message_type": "XKQ[1]",
+      "description": "Extended Kalman Filter quaternion data from instance 1",
+      "data_points": 5623,
+      "time_range": {
+        "start_ms": 6135.644,
+        "end_ms": 231016.206,
+        "duration_ms": 224880.562
+      },
+      "fields": {
+        "C": {
+          "description": "Data field C",
+          "units": "unknown",
+          "min": 1.0,
+          "max": 1.0,
+          "mean": 1.0,
+          "std_dev": 0.0
+        },
+        "Q1": {
+          "description": "Quaternion component 1 (w)",
+          "units": "unitless",
+          "min": 0.99998,
+          "max": 1.0,
+          "mean": 0.99999,
+          "std_dev": 7e-06
+        },
+        "Q2": {
+          "description": "Quaternion component 2 (x)",
+          "units": "unitless",
+          "min": -0.001598,
+          "max": 0.0,
+          "mean": -0.000722,
+          "std_dev": 0.000543
+        },
+        "Q3": {
+          "description": "Quaternion component 3 (y)",
+          "units": "unitless",
+          "min": 0.0,
+          "max": 0.006283,
+          "mean": 0.003701,
+          "std_dev": 0.002458
+        },
+        "Q4": {
+          "description": "Quaternion component 4 (z)",
+          "units": "unitless",
+          "min": -0.001346,
+          "max": 0.00103,
+          "mean": -0.000173,
+          "std_dev": 0.000428
+        }
+      }
+    },
+    "XKQ[2]": {
+      "message_type": "XKQ[2]",
+      "description": "Extended Kalman Filter quaternion data from instance 2",
+      "data_points": 5623,
+      "time_range": {
+        "start_ms": 6135.644,
+        "end_ms": 231016.206,
+        "duration_ms": 224880.562
+      },
+      "fields": {
+        "C": {
+          "description": "Data field C",
+          "units": "unknown",
+          "min": 2.0,
+          "max": 2.0,
+          "mean": 2.0,
+          "std_dev": 0.0
+        },
+        "Q1": {
+          "description": "Quaternion component 1 (w)",
+          "units": "unitless",
+          "min": 0.999964,
+          "max": 1.0,
+          "mean": 0.999984,
+          "std_dev": 1.1e-05
+        },
+        "Q2": {
+          "description": "Quaternion component 2 (x)",
+          "units": "unitless",
+          "min": -0.004065,
+          "max": 0.0,
+          "mean": -0.002201,
+          "std_dev": 0.001485
+        },
+        "Q3": {
+          "description": "Quaternion component 3 (y)",
+          "units": "unitless",
+          "min": 0.0,
+          "max": 0.007159,
+          "mean": 0.004163,
+          "std_dev": 0.00277
+        },
+        "Q4": {
+          "description": "Quaternion component 4 (z)",
+          "units": "unitless",
+          "min": -0.000741,
+          "max": 0.002827,
+          "mean": 0.000174,
+          "std_dev": 0.000697
+        }
+      }
+    },
+    "XKF4[0]": {
+      "message_type": "XKF4[0]",
+      "description": "Extended Kalman Filter state data from instance 0",
+      "data_points": 5623,
+      "time_range": {
+        "start_ms": 6135.644,
+        "end_ms": 231016.206,
+        "duration_ms": 224880.562
+      },
+      "fields": {
+        "C": {
+          "description": "Data field C",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "SV": {
+          "description": "Number of satellites visible",
+          "units": "count",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "SP": {
+          "description": "Data field SP",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "SH": {
+          "description": "Data field SH",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.05,
+          "mean": 0.006155,
+          "std_dev": 0.00976
+        },
+        "SM": {
+          "description": "Data field SM",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "SVT": {
+          "description": "Data field SVT",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "errRP": {
+          "description": "Data field errRP",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.141425,
+          "mean": 0.00699,
+          "std_dev": 0.014243
+        },
+        "OFN": {
+          "description": "Data field OFN",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "OFE": {
+          "description": "Data field OFE",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "FS": {
+          "description": "Data field FS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 128.0,
+          "mean": 38.994131,
+          "std_dev": 58.912703
+        },
+        "TS": {
+          "description": "Data field TS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 50.0,
+          "mean": 34.767917,
+          "std_dev": 23.012774
+        },
+        "SS": {
+          "description": "Data field SS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 65671.0,
+          "mean": 45372.615152,
+          "std_dev": 30347.51922
+        },
+        "GPS": {
+          "description": "Data field GPS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 512.0,
+          "mean": 304.227281,
+          "std_dev": 235.181307
+        },
+        "PI": {
+          "description": "Data field PI",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 2.0,
+          "mean": 1.399609,
+          "std_dev": 0.916686
+        }
+      }
+    },
+    "XKF4[1]": {
+      "message_type": "XKF4[1]",
+      "description": "Extended Kalman Filter state data from instance 1",
+      "data_points": 5623,
+      "time_range": {
+        "start_ms": 6135.644,
+        "end_ms": 231016.206,
+        "duration_ms": 224880.562
+      },
+      "fields": {
+        "C": {
+          "description": "Data field C",
+          "units": "unknown",
+          "min": 1.0,
+          "max": 1.0,
+          "mean": 1.0,
+          "std_dev": 0.0
+        },
+        "SV": {
+          "description": "Number of satellites visible",
+          "units": "count",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "SP": {
+          "description": "Data field SP",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "SH": {
+          "description": "Data field SH",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.05,
+          "mean": 0.005993,
+          "std_dev": 0.009617
+        },
+        "SM": {
+          "description": "Data field SM",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "SVT": {
+          "description": "Data field SVT",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "errRP": {
+          "description": "Data field errRP",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.141424,
+          "mean": 0.007008,
+          "std_dev": 0.014272
+        },
+        "OFN": {
+          "description": "Data field OFN",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "OFE": {
+          "description": "Data field OFE",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "FS": {
+          "description": "Data field FS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 128.0,
+          "mean": 38.994131,
+          "std_dev": 58.912703
+        },
+        "TS": {
+          "description": "Data field TS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 50.0,
+          "mean": 34.767917,
+          "std_dev": 23.012774
+        },
+        "SS": {
+          "description": "Data field SS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 65671.0,
+          "mean": 45372.615152,
+          "std_dev": 30347.51922
+        },
+        "GPS": {
+          "description": "Data field GPS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 512.0,
+          "mean": 304.227281,
+          "std_dev": 235.181307
+        },
+        "PI": {
+          "description": "Data field PI",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 2.0,
+          "mean": 1.399609,
+          "std_dev": 0.916686
+        }
+      }
+    },
+    "XKF4[2]": {
+      "message_type": "XKF4[2]",
+      "description": "Extended Kalman Filter state data from instance 2",
+      "data_points": 5623,
+      "time_range": {
+        "start_ms": 6135.644,
+        "end_ms": 231016.206,
+        "duration_ms": 224880.562
+      },
+      "fields": {
+        "C": {
+          "description": "Data field C",
+          "units": "unknown",
+          "min": 2.0,
+          "max": 2.0,
+          "mean": 2.0,
+          "std_dev": 0.0
+        },
+        "SV": {
+          "description": "Number of satellites visible",
+          "units": "count",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "SP": {
+          "description": "Data field SP",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.01,
+          "mean": 0.000582,
+          "std_dev": 0.00234
+        },
+        "SH": {
+          "description": "Data field SH",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.05,
+          "mean": 0.006173,
+          "std_dev": 0.009567
+        },
+        "SM": {
+          "description": "Data field SM",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "SVT": {
+          "description": "Data field SVT",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "errRP": {
+          "description": "Data field errRP",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.141424,
+          "mean": 0.007008,
+          "std_dev": 0.014289
+        },
+        "OFN": {
+          "description": "Data field OFN",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "OFE": {
+          "description": "Data field OFE",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "std_dev": 0.0
+        },
+        "FS": {
+          "description": "Data field FS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 128.0,
+          "mean": 38.994131,
+          "std_dev": 58.912703
+        },
+        "TS": {
+          "description": "Data field TS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 50.0,
+          "mean": 34.767917,
+          "std_dev": 23.012774
+        },
+        "SS": {
+          "description": "Data field SS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 65671.0,
+          "mean": 45372.615152,
+          "std_dev": 30347.51922
+        },
+        "GPS": {
+          "description": "Data field GPS",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 512.0,
+          "mean": 304.227281,
+          "std_dev": 235.181307
+        },
+        "PI": {
+          "description": "Data field PI",
+          "units": "unknown",
+          "min": 0.0,
+          "max": 2.0,
+          "mean": 1.399609,
+          "std_dev": 0.916686
+        }
+      }
+    }
+  },
+  "csv_files": [
+    "flight_data_exports/timeseries_AHR2_20250728_215605.csv",
+    "flight_data_exports/timeseries_ATT_20250728_215605.csv",
+    "flight_data_exports/timeseries_GPS_0_20250728_215605.csv",
+    "flight_data_exports/timeseries_POS_20250728_215605.csv",
+    "flight_data_exports/timeseries_XKQ_0_20250728_215605.csv",
+    "flight_data_exports/timeseries_XKQ_1_20250728_215605.csv",
+    "flight_data_exports/timeseries_XKQ_2_20250728_215605.csv",
+    "flight_data_exports/timeseries_XKF4_0_20250728_215605.csv",
+    "flight_data_exports/timeseries_XKF4_1_20250728_215605.csv",
+    "flight_data_exports/timeseries_XKF4_2_20250728_215605.csv"
+  ]
+}
