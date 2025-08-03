@@ -85,7 +85,9 @@ import {
 } from './cesiumExtra/boundingPolygon.js'
 
 // Set Cesium token from environment variable
-Ion.defaultAccessToken = process.env.VUE_APP_CESIUM_TOKEN || ''
+Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+    'eyJqdGkiOiI3ZGI3OGUyZC1jMWQzLTQ3MjUtYWUxZC1kNDk5ZDRiOWNkMDQiLCJpZCI6MzIyODYzLCJpYXQiOjE3NTI4NzAyNTR9.' +
+    'HyONi8HSvG9taAWyKWKtc8L_D4tKhJAlySSZ9AfP5vU'
 
 const colorCoderMode = new ColorCoderMode(store)
 const colorCoderRange = new ColorCoderRange(store)
@@ -248,7 +250,7 @@ export default {
         },
         createViewer (online) {
             if (online) {
-                console.log('creating online viewer')
+                console.log('Cesium token:', process.env.VUE_APP_CESIUM_TOKEN)
                 const imageryProviders = this.createAdditionalProviders()
                 return new Viewer(
                     'cesiumContainer',
