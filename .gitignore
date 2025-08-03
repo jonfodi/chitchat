@@ -1,3 +1,6 @@
+backend/flight_data_exports/
+flight.bin
+
 .DS_Store
 node_modules/
 /dist/

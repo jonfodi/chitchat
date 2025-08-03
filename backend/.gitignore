@@ -3,6 +3,7 @@ venv/
 __pycache__
 ../.env
 ../flight.bin
+backend/flight_data_exports/
 *.pyc
 *.pyo
 *.pyd
