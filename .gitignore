@@ -1,5 +1,6 @@
 backend/flight_data_exports/
 flight.bin
+.env
 
 .DS_Store
 node_modules/

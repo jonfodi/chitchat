@@ -2,7 +2,7 @@ from google import genai
 import pandas as pd
 
 # The client gets the API key from the environment variable `GEMINI_API_KEY`.
-client = genai.Client(api_key="AIzaSyDc_YFO9MiE_e69LVkCd_zS-xmTGog-fos")
+client = genai.Client(api_key="")
 df = pd.read_csv('../flight_data_exports/timeseries_AHR2_20250801_155049.csv')
 csv_content = df.to_string()
 
