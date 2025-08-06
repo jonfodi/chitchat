@@ -1,7 +1,8 @@
 import pandas as pd
 import anthropic
+import os
 
-client = anthropic.Anthropic(api_key="")
+client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 print("initialized client")
 
 df = pd.read_csv('../flight_data_exports/timeseries_AHR2_20250801_155049.csv')
