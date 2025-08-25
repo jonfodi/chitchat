@@ -22,6 +22,5 @@ class FlightDataRequest(BaseModel):
         return v
     
 class ChatRequest(BaseModel):
-    messages: List[Dict[str, Any]]
     conversation_id: str
-    
+    user_query: str
