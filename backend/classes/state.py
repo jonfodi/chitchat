@@ -21,8 +21,7 @@ from typing import TypedDict, NotRequired, Required, Dict, List, Any
 # yes we do. we need to store in DB 
 
 class InputState(TypedDict, total=False):
-    user_query: str
-    conversation_id: str
+    conversation: List[Dict[str, Any]]
 
 
 class AnalysisState(InputState):

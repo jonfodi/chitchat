@@ -1,5 +1,6 @@
 # main.py - FastAPI backend to receive flight data
 import csv
+from graph import Graph
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models import FlightDataRequest, ChatRequest
@@ -126,9 +127,9 @@ async def chat(data: ChatRequest):
     })
     
     graph = Graph(
-        
-  
+        conversation = conversation
     )
+    final_state = graph.run()
 
 def is_valid_message_type(msg_type: str) -> bool:
     """Check if message type is valid."""

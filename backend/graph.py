@@ -27,26 +27,34 @@ class Graph:
 
     def _init_nodes(self):
         """Initialize all workflow nodes"""
-        self.receive = Receiver()
         self.validate = Validator()
+        self.analyzer = Analyzer()
  
     def _build_workflow(self):
         """Configure the state graph workflow"""
         self.workflow = StateGraph(AnalysisState)
         
         # Add nodes with their respective processing functions
-        self.workflow.add_node("crawler", self.crawler.run)
-        self.workflow.add_node("extractor", self.extract.run)
-        self.workflow.add_node("processor", self.process.run)
+        self.workflow.add_node("validator", self.validator.run)
+        seld.workflow.add_node(analyzer, self.analyzer.run)
+        # Set entry point
+        self.workflow.set_entry_point("validator")
 
-        # Configure workflow edges
-        self.workflow.set_entry_point("crawler")
-        self.workflow.set_finish_point("processor")
-        
+        # Add conditional edge from validator
+        self.workflow.add_conditional_edges(
+            "validator",  # source node
+            self.route_after_validation,  # router function
+            {
+                "analyzer": "analyzer",
+                "response_handler": "response_handler"
+            }
+        )
 
-        # Connect remaining nodes
-        self.workflow.add_edge("crawler", "extractor")
-        self.workflow.add_edge("extractor", "processor")
+        # Both nodes can be terminal, so set multiple finish points
+        self.workflow.set_finish_point("analyzer")
+        self.workflow.set_finish_point("response_handler")
+
+ 
 
     def run(self) -> Dict[str, Any]:
         """Execute the workflow synchronously"""
