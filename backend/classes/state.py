@@ -1,32 +1,22 @@
 from enum import Enum
 from typing import TypedDict, NotRequired, Required, Dict, List, Any
 
-# Define a single shoe item
-# ideally this would be data that a nike api would need to retrieve an item and process a payment
-class ShoeItem(TypedDict):
-    pass
+# how should this work
+# so we have an endpoint that frontend is sending data to
+# we need to process it --> MavLinkProcessor
+# but then i want to send a chat message to user like hey im an assistant feel free to ask me anything about the data
+# that seems more complex
+# i can also just process in endpoint and pass data to the graph as inputstate
+# this solution would be: process_flight_data processes. stores data in a database.
+# agent endpoint is chat. 
+# then just need to figure out how to get the conversation working with this flow 
+# maybe its a conditional edge? 
 
-# make gender enum of either male or female
-class Gender(Enum):
-    MALE = "men"
-    WOMAN = "women"
-
-class ShoeType(Enum):
-    AIR_FORCE_ONE = "air force one"
-    AIR_JORDAN = "air jordan"
-    AIR_MAX = "air max"
 
 class InputState(TypedDict, total=False):
-    shoe_type: Required[str]
-    size: Required[float]
-    gender: Required[Gender]
-    budget: NotRequired[int]
-    color: NotRequired[str]
+    user_query: str
+
 
 class AnalysisState(InputState):
-    url: str
-    shoe_data: Dict[str, Any]
-    enhanced_shoe_data: Dict[str, Any]
-    shoe_reccomendations: List[Dict[str, Any]]  # Ranked list of shoe recommendations
-    extraction_status: NotRequired[str]  # Track extraction success/failure
+    messages: List[Dict[str, Any]] # [{role: user, content: str}, {role: assistant, content: str}]
 

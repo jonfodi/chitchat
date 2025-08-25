@@ -4,16 +4,12 @@ from typing import Any, Dict
 from langchain_core.messages import SystemMessage
 from langgraph.graph import StateGraph
 
-from backend.nodes.crawler import Crawler
-
 from .classes.state import InputState, AnalysisState
-from .nodes.extract import Extractor
-from .nodes.process import Processor
+from .nodes.receiver import Receiver
+from .nodes.validator import Validator
 
 logger = logging.getLogger(__name__)
 
-#  IMPROVEMENTS 
-# node for making the payment 
 class Graph:
     def __init__(self, shoe_type=None, size=None, budget=None, color=None, gender=None):
         
@@ -35,13 +31,12 @@ class Graph:
 
     def _init_nodes(self):
         """Initialize all workflow nodes"""
-        self.extract = Extractor()
-        self.process = Processor()
-        self.crawler = Crawler()
+        self.receive = Receiver()
+        self.validate = Validator()
  
     def _build_workflow(self):
         """Configure the state graph workflow"""
-        self.workflow = StateGraph(ShoppingState)
+        self.workflow = StateGraph(AnalysisState)
         
         # Add nodes with their respective processing functions
         self.workflow.add_node("crawler", self.crawler.run)

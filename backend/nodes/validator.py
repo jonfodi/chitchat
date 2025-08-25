@@ -1,5 +1,4 @@
 import logging
-from tavily import TavilyClient
 import dotenv
 
 from backend.classes.state import Gender, InputState

@@ -260,6 +260,12 @@ async def process_flight_data(data: FlightDataRequest):
         print(f"ERROR processing flight data: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+class ChatRequest(BaseModel):
+    messages: List[Dict[str, Any]]
+
+@app.post("/api/chat")
+async def chat(data: ChatRequest):
+    
 
 @app.get("/api/health")
 async def health_check():
