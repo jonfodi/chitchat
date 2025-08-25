@@ -1,9 +1,9 @@
 import logging
 import dotenv
+from openai import OpenAI
 
-from backend.classes.state import Gender, InputState
 
-from ..classes import AnalysisState
+from ..classes import InputState, AnalysisState
 from typing import Any, Dict
 
 dotenv.load_dotenv()
@@ -11,21 +11,25 @@ logger = logging.getLogger(__name__)
 
 class Validator:
     def __init__(self): 
-        pass
+        self.openai_client = OpenAI()
 
-    def validate(self, state: AnalysisState) -> Dict[str, Any]:
+    def validate(self, state: InputState) -> Dict[str, Any]:
         can_analyze = run_validation_prompt(state)
 
         state["can_analyze"] = can_analyze
         return state
 
 
-    def run(self, state: AnalysisState) -> Dict[str, Any]:
+    def run(self, state: InputState) -> Dict[str, Any]:
         return self.validate(state)
 
 
-def run_validation_prompt(state: AnalysisState) -> bool:
-    user_query = state["messages"][-1]["content"]
+def run_validation_prompt(state: InputState) -> bool:
+    # Get the last user message using next() with a reversed generator expression
+    user_query = next((msg["content"] for msg in reversed(state["conversation"]) if msg["role"] == "user"), None)
+    if user_query is None:
+        return False
+    print(user_query)
     prompt = f"""
     You are a helpful assistant that validates user queries.
     You need to determine if the user query is respondable given the data. 
@@ -36,4 +40,21 @@ def run_validation_prompt(state: AnalysisState) -> bool:
     The user query is:
     User query: {user_query}
     """
+    return True
+    try:
+        client = OpenAI()
+        response = client.chat.completions.create(
+            model="gpt-4.1",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant that validates user queries. You must return a boolean value."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0,
+            max_tokens=1000
+        )
+        return response.output_text
     
+    except Exception as e:
+        logger.error(f"Error running validation prompt: {e}")
+        return False
+
