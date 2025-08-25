@@ -2,7 +2,7 @@
 import csv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from models import FlightDataRequest
+from models import FlightDataRequest, ChatRequest
 from typing import Dict, Any, List
 from datetime import datetime
 from pathlib import Path
@@ -260,11 +260,9 @@ async def process_flight_data(data: FlightDataRequest):
         print(f"ERROR processing flight data: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-class ChatRequest(BaseModel):
-    messages: List[Dict[str, Any]]
-
 @app.post("/api/chat")
 async def chat(data: ChatRequest):
+    pass
     
 
 @app.get("/api/health")
