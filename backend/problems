@@ -1,0 +1,3 @@
+need to add some color to the users message
+if i use system instruction each time, i dont think that makes sense in chat context (changing system instruciton each time)
+if i have a user message and query, i need to store them both individually in "db" 

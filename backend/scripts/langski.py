@@ -7,9 +7,7 @@ llm = ChatOpenAI(
     temperature=0,
     max_tokens=None,
     timeout=None,
-    max_retries=2,
-    api_key="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", 
-    
+    max_retries=2,    
 )
 
 print("*" * 50)

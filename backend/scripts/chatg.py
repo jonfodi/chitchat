@@ -1,6 +1,9 @@
 from google import genai
+import dotenv
 
-client = genai.Client(api_key="AIzaSyDc_YFO9MiE_e69LVkCd_zS-xmTGog-fos")
+dotenv.load_dotenv()
+
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 chat = client.chats.create(model="gemini-2.5-flash")
 
 response = chat.send_message("I have 2 dogs in my house.")

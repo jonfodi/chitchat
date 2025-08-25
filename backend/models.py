@@ -1,6 +1,22 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Dict, Any
+from enum import Enum
+
+class AllowedMessagTypes(str, Enum):
+    AHR2 = "AHR2"
+    GPS = "GPS"
+    POS = "POS"
+    ATT = "ATT"
+
 
 # Pydantic models for request validation
 class FlightDataRequest(BaseModel):
     messages: Dict[str, Any]
+
+
+    @field_validator('messages')
+    def validate_messages(cls, v):
+        if not isinstance(v, dict):
+            raise ValueError("messages must be a dictionary")
+        return v
+    

@@ -9,7 +9,7 @@ from pathlib import Path
 import json
 
 app = FastAPI(title="Flight Data Processor", version="1.0.0")
-
+counter = 0
 # Enable CORS for Vue frontend
 app.add_middleware(
     CORSMiddleware,
@@ -18,11 +18,7 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
-ALLOWED_MESSAGE_TYPES = {
-    'ATT', 'AHR2', 'GPS[0]', 'POS', 
-    'XKQ[0]', 'XKQ[1]', 'XKQ[2]', 
-    'XKF4[0]', 'XKF4[1]', 'XKF4[2]'
-}
+
 
 MESSAGE_DESCRIPTIONS = {
     "AHR2": "Attitude and heading reference data containing roll, pitch, yaw angles, altitude, position coordinates, and quaternion values for aircraft orientation",
@@ -100,238 +96,18 @@ FIELD_INFO = {
     "Instance": {"description": "instance number", "units": "instance"},
 }
 
-ALLOWED_MESSAGE_TYPES = {
-    'ATT', 'AHR2', 'GPS[0]', 'POS', 
-    'XKQ[0]', 'XKQ[1]', 'XKQ[2]', 
-    'XKF4[0]', 'XKF4[1]', 'XKF4[2]'
-}
+def is_valid_message_type(msg_type: str) -> bool:
+    """Check if message type is valid."""
+    return msg_type in ALLOWED_MESSAGE_TYPES
 
-def has_control_pairs(msg_data: Dict[str, Any]) -> bool:
-    """Check if message has desired/actual control pairs."""
-    control_pairs = [
-        ("Roll", "DesRoll"),
-        ("Pitch", "DesPitch"), 
-        ("Yaw", "DesYaw")
-    ]
-    
-    return any(
-        actual in msg_data and desired in msg_data
-        for actual, desired in control_pairs
-    )
-
-def assess_control_quality(avg_rms: float, avg_correlation: float) -> str:
-    """Assess overall control quality based on RMS error and correlation."""
-    if avg_rms < 0.01 and avg_correlation > 0.95:
-        return "EXCELLENT"
-    elif avg_rms < 0.05 and avg_correlation > 0.85:
-        return "GOOD"
-    elif avg_rms < 0.1 and avg_correlation > 0.7:
-        return "FAIR"
-    else:
-        return "POOR"
-
-def calculate_rate_of_change_stats(values: List[float], time_ms: List[float]) -> Dict[str, float]:
-    """Calculate rate of change statistics for stability assessment."""
-    if len(values) < 2 or len(time_ms) < 2 or len(values) != len(time_ms):
-        return {}
-    
-    # Calculate rates of change
-    rates = []
-    for i in range(1, len(values)):
-        dt = (time_ms[i] - time_ms[i-1]) / 1000.0  # Convert ms to seconds
-        if dt > 0:
-            rate = (values[i] - values[i-1]) / dt
-            rates.append(rate)
-    
-    if not rates:
-        return {}
-    
-    # Calculate standard deviation of rates
-    mean_rate = sum(rates) / len(rates)
-    variance = sum((rate - mean_rate) ** 2 for rate in rates) / len(rates)
-    std_dev_rate = variance ** 0.5
-    
-    return {
-        "std_dev_rate": round(std_dev_rate, 6)
-    }
-
-def calculate_control_error_stats(desired_values: List[float], actual_values: List[float]) -> Dict[str, float]:
-    """Calculate control error RMS and correlation coefficient."""
-    if not desired_values or not actual_values or len(desired_values) != len(actual_values):
-        return {}
-    
-    # Calculate errors
-    errors = [actual - desired for actual, desired in zip(actual_values, desired_values)]
-    
-    # RMS Error
-    squared_errors = [error ** 2 for error in errors]
-    rms_error = (sum(squared_errors) / len(squared_errors)) ** 0.5
-    
-    # Correlation coefficient
-    n = len(desired_values)
-    mean_desired = sum(desired_values) / n
-    mean_actual = sum(actual_values) / n
-    
-    numerator = sum((d - mean_desired) * (a - mean_actual) 
-                   for d, a in zip(desired_values, actual_values))
-    
-    sum_sq_desired = sum((d - mean_desired) ** 2 for d in desired_values)
-    sum_sq_actual = sum((a - mean_actual) ** 2 for a in actual_values)
-    
-    denominator = (sum_sq_desired * sum_sq_actual) ** 0.5
-    correlation = numerator / denominator if denominator != 0 else 0.0
-    
-    return {
-        "rms_error": round(rms_error, 6),
-        "correlation": round(correlation, 6)
-    }
-
-def analyze_gps_performance(msg_data: Dict[str, Any], time_data: List[float]) -> Dict[str, Any]:
-    """Analyze GPS performance metrics."""
-    if not has_gps_fields(msg_data):
-        return {}
-    
-    performance = {}
-    
-    # Satellite performance
-    if "SV" in msg_data:
-        sv_data = [float(x) for x in msg_data["SV"] if isinstance(x, (int, float))]
-        if sv_data:
-            good_fix_count = sum(1 for sv in sv_data if sv >= 4)
-            good_fix_ratio = good_fix_count / len(sv_data)
-            
-            performance["satellite_performance"] = {
-                "good_fix_ratio": round(good_fix_ratio, 6),
-                "avg_satellites": round(sum(sv_data) / len(sv_data), 6)
-            }
-    
-    # Accuracy performance
-    if "HDop" in msg_data:
-        hdop_data = [float(x) for x in msg_data["HDop"] if isinstance(x, (int, float))]
-        if hdop_data:
-            good_accuracy_count = sum(1 for hdop in hdop_data if hdop <= 5.0)
-            good_accuracy_ratio = good_accuracy_count / len(hdop_data)
-            
-            performance["accuracy_performance"] = {
-                "good_accuracy_ratio": round(good_accuracy_ratio, 6),
-                "avg_hdop": round(sum(hdop_data) / len(hdop_data), 6)
-            }
-    
-    return performance
-
-def analyze_control_performance(msg_data: Dict[str, Any], time_data: List[float]) -> Dict[str, Any]:
-    """Analyze control performance for messages with control pairs."""
-    if not has_control_pairs(msg_data):
-        return {}
-    
-    control_pairs = [
-        ("Roll", "DesRoll"),
-        ("Pitch", "DesPitch"),
-        ("Yaw", "DesYaw")
-    ]
-    
-    control_analysis = {}
-    rms_values = []
-    correlation_values = []
-    
-    for actual_field, desired_field in control_pairs:
-        if actual_field in msg_data and desired_field in msg_data:
-            actual_values = [float(x) for x in msg_data[actual_field]]
-            desired_values = [float(x) for x in msg_data[desired_field]]
-            
-            # Control error analysis
-            error_stats = calculate_control_error_stats(desired_values, actual_values)
-            
-            # Rate of change analysis
-            rate_stats = calculate_rate_of_change_stats(actual_values, time_data)
-            
-            # Actual value stability
-            actual_stats = calculate_field_stats(actual_values)
-            
-            control_analysis[actual_field.lower()] = {
-                "control_errors": error_stats,
-                "rate_statistics": rate_stats,
-                "stability": {
-                    "actual_std_dev": actual_stats.get("std_dev", 0.0)
-                }
-            }
-            
-            # Collect for overall assessment
-            if error_stats:
-                rms_values.append(error_stats["rms_error"])
-                correlation_values.append(error_stats["correlation"])
-    
-    # Overall assessment
-    if rms_values and correlation_values:
-        avg_rms = sum(rms_values) / len(rms_values)
-        avg_correlation = sum(correlation_values) / len(correlation_values)
-        control_quality = assess_control_quality(avg_rms, avg_correlation)
-        
-        control_analysis["overall_assessment"] = {
-            "control_quality": control_quality,
-            "avg_rms_error": round(avg_rms, 6),
-            "avg_correlation": round(avg_correlation, 6)
-        }
-    
-    return control_analysis
-
-def calculate_field_stats(data: List[float]) -> Dict[str, float]:
-    """Calculate statistics for a numeric field."""
-    if not data:
-        return {}
-    
-    min_val = min(data)
-    max_val = max(data)
-    mean_val = sum(data) / len(data)
-    variance = sum((x - mean_val) ** 2 for x in data) / len(data)
-    std_dev = variance ** 0.5
-    
-    return {
-        "min": round(min_val, 6),
-        "max": round(max_val, 6),
-        "mean": round(mean_val, 6),
-        "std_dev": round(std_dev, 6)
-    }
-
-def is_valid_message(msg_type: str, msg_data: Any) -> bool:
-    """Check if message type and data are valid for processing."""
+def is_valid_message_data(msg_data: Any) -> bool:
+    """Check if message data is valid."""
     return (
-        msg_type in ALLOWED_MESSAGE_TYPES and
-        isinstance(msg_data, dict) and
-        'time_boot_ms' in msg_data and
-        isinstance(msg_data['time_boot_ms'], list) and
+        isinstance(msg_data, dict) and 
+        'time_boot_ms' in msg_data and 
+        isinstance(msg_data['time_boot_ms'], list) and 
         len(msg_data['time_boot_ms']) > 0
     )
-
-def process_messages(messages: Dict[str, Any]) -> Dict[str, Any]:
-    """Process all valid messages and return metadata with CSV file paths."""
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_dir = Path("flight_data_exports")
-    output_dir.mkdir(exist_ok=True)
-    
-    processed_data = {
-        "flight_id": f"flight_{timestamp}",
-        "generated_timestamp": timestamp,
-        "message_types": {},
-        "csv_files": []
-    }
-    
-    for msg_type, msg_data in messages.items():
-        if not is_valid_message(msg_type, msg_data):
-            if msg_type in ALLOWED_MESSAGE_TYPES:
-                print(f"⚠️  Skipping message type '{msg_type}' - invalid structure")
-            continue
-        
-        # Export timeseries to CSV
-        csv_filename = export_timeseries_to_csv(msg_type, msg_data, output_dir, timestamp)
-        processed_data["csv_files"].append(csv_filename)
-        
-        # Create metadata (without timeseries)
-        processed_data["message_types"][msg_type] = create_message_metadata(msg_type, msg_data)
-        
-        print(f"✅ Processed {msg_type}: {len(msg_data['time_boot_ms'])} data points -> {csv_filename}")
-    
-    return processed_data
 
 def export_metadata_to_json(processed_data: Dict[str, Any]) -> str:
     """Export metadata (without timeseries) to JSON file."""
@@ -342,6 +118,7 @@ def export_metadata_to_json(processed_data: Dict[str, Any]) -> str:
         json.dump(processed_data, f, indent=2, ensure_ascii=False)
     
     return str(filename)
+
 def has_gps_fields(msg_data: Dict[str, Any]) -> bool:
     """Check if message has GPS performance fields."""
     gps_fields = ["SV", "HDop", "VDop"]
@@ -361,7 +138,6 @@ def get_message_description(msg_type: str) -> str:
     """Get description for a message type."""
     return MESSAGE_DESCRIPTIONS.get(msg_type, f"MAVLink message type {msg_type} telemetry data")
 
-
 def get_field_info(field_name: str) -> Dict[str, str]:
     """Get description and units for a field."""
     return FIELD_INFO.get(field_name, {
@@ -369,7 +145,7 @@ def get_field_info(field_name: str) -> Dict[str, str]:
         "units": "unknown"
     })
 
-def export_timeseries_to_csv(msg_type: str, msg_data: Dict[str, Any], output_dir: Path, timestamp: str) -> str:
+def create_csv_for_message_type(msg_type: str, msg_data: Dict[str, Any], output_dir: Path, timestamp: str) -> str:
     """Export timeseries data for a message type to CSV."""
     filename = output_dir / f"timeseries_{msg_type.replace('[', '_').replace(']', '')}_{timestamp}.csv"
     
@@ -392,6 +168,7 @@ def export_timeseries_to_csv(msg_type: str, msg_data: Dict[str, Any], output_dir
             writer.writerow(row)
     
     return str(filename)
+
 def create_message_metadata(msg_type: str, msg_data: Dict[str, Any]) -> Dict[str, Any]:
     """Create metadata for a message type without timeseries data."""
     time_data = msg_data['time_boot_ms']
@@ -424,31 +201,49 @@ def create_message_metadata(msg_type: str, msg_data: Dict[str, Any]) -> Dict[str
         "fields": fields_info
     }
     
-    # Add control performance analysis for ATT messages
-    if msg_type == "ATT":
-        control_performance = analyze_control_performance(msg_data, time_data)
-        if control_performance:
-            metadata["control_performance"] = control_performance
-    
-    # Add GPS performance analysis for GPS messages
-    if msg_type == "GPS[0]":
-        gps_performance = analyze_gps_performance(msg_data, time_data)
-        if gps_performance:
-            metadata["gps_performance"] = gps_performance
-    
     return metadata
+            
+def process_messages(messages: Dict[str, Any]) -> Dict[str, Any]:
+    """Process all valid messages and return metadata with CSV file paths."""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_dir = Path("flight_data_exports")
+    output_dir.mkdir(exist_ok=True)
+    
+    for msg_type, msg_data in messages.items():
+        if not is_valid_message_type(msg_type) or not is_valid_message_data(msg_data):
+            print(f"Skipping message type '{msg_type}")
+            continue
+        
+        # Export timeseries to CSV
+        csv_filename = create_csv_for_message_type(msg_type, msg_data, output_dir, timestamp)
 
+        # Create metadata (without timeseries)
+        processed_data["message_types"][msg_type] = create_message_metadata(msg_type, msg_data)
+        
+        print(f"Processed {msg_type}: {len(msg_data['time_boot_ms'])} data points -> {csv_filename}")
+    
+    return processed_data
 
 @app.post("/api/process-flight-data")
 async def process_flight_data(data: FlightDataRequest):
-    """Receive flight data from Vue frontend and export to CSV and JSON."""
+   
+    print("=" * 50)
+    print("PROCESSING FLIGHT DATA")
+    print("=" * 50)
+
     try:
-        print("=" * 50)
-        print("PROCESSING FLIGHT DATA")
-        print("=" * 50)
-        
+
         messages = data.messages
-        print(f"Received {len(messages)} message types: {list(messages.keys())}")
+        message_types = messages.keys()
+        message_date = messages.values()
+
+        dicto = {
+            "timestamp": x, 
+            "data": {
+                "Roll": x,
+                "Desired Roll": y,
+            }
+        }
         
         # Process messages
         processed_data = process_messages(messages)
@@ -458,62 +253,12 @@ async def process_flight_data(data: FlightDataRequest):
         
         # Log results
         valid_types = list(processed_data["message_types"].keys())
-        print(f"✅ Successfully processed {len(valid_types)} message types: {valid_types}")
-        print(f"📄 Metadata exported to: {json_filename}")
-        print(f"📊 CSV files created: {len(processed_data['csv_files'])}")
-        
-        return {
-            "status": "success",
-            "message": "Flight data processed successfully",
-            "flight_id": processed_data["flight_id"],
-            "message_types_processed": valid_types,
-            "total_message_types": len(valid_types),
-            "csv_files": processed_data["csv_files"],
-            "metadata_file": json_filename
-        }
+
+        return True
         
     except Exception as e:
-        print(f"❌ ERROR processing flight data: {str(e)}")
+        print(f"ERROR processing flight data: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
-def classify_question_intent(user_question: str):
-    prompt = f"""
-    You are a helpful assistant that classifies the intent of a user's question.
-    The user's question is: {user_question}
-    The intent is:
-    """
-    response = claude.generate_response(prompt)
-    return response
-
-def ask_investiative_question(user_question: str, csv_file_path: str):
-    prompt = f"""
-    You are a helpful assistant that asks an investigative question to the user.
-    The user's question is: {user_question}
-    The question is:
-    """
-    response = claude.generate_response(prompt)
-    return response
-
-def ask_specific_question(user_question: str, json_file_path: str):
-    prompt = f"""
-    You are a helpful assistant that asks a specific question to the user.
-    The user's question is: {user_question}
-    The question is:
-
-    """
-    response = claude.generate_response(prompt)
-    return response
-
-def generate_response(user_question: str):
-    pass
-@app.get("/api/chat")
-async def chat(user_question: str):
-    #initial LLM call to classify the question
-    try:
-        reponse_message = generate_response(user_question)
-        return {"message": user_question, "response": reponse_message}
-    except Exception as e:
-        return {"message": user_question, "error": f"Error: {e}"}
 
 
 @app.get("/api/health")
@@ -523,7 +268,6 @@ async def health_check():
 @app.get("/")
 async def root():
     return {"message": "Flight Data Processor API", "docs": "/docs"}
-
 
 if __name__ == "__main__":
     import uvicorn
