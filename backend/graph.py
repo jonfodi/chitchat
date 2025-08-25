@@ -12,11 +12,12 @@ from .nodes.analyzer import Analyzer
 logger = logging.getLogger(__name__)
 
 class Graph:
-    def __init__(self, conversation: List[Dict[str, Any]]):
+    def __init__(self, conversation: List[Dict[str, Any]], data: Dict[str, Any]):
         
         # Initialize InputState
         self.input_state = InputState(
             conversation = conversation,
+            data = data,
             messages=[
                 SystemMessage(content="Expert flight data analyst")
             ]
@@ -28,7 +29,7 @@ class Graph:
 
     def _init_nodes(self):
         """Initialize all workflow nodes"""
-        self.validate = Validator()
+        self.validator = Validator()
         self.analyzer = Analyzer()
  
     def _build_workflow(self):
@@ -42,18 +43,18 @@ class Graph:
         self.workflow.set_entry_point("validator")
 
         # Add conditional edge from validator
-        self.workflow.add_conditional_edges(
-            "validator",  # source node
-            self.route_after_validation,  # router function
-            {
-                "analyzer": "analyzer",
-                "response_handler": "response_handler"
-            }
-        )
+        # self.workflow.add_conditional_edges(
+        #     "validator",  # source node
+        #     self.route_after_validation,  # router function
+        #     {
+        #         "analyzer": "analyzer",
+        #         "response_handler": "response_handler"
+        #     }
+        # )
 
         # Both nodes can be terminal, so set multiple finish points
         self.workflow.set_finish_point("analyzer")
-        self.workflow.set_finish_point("response_handler")
+        # self.workflow.set_finish_point("response_handler")
 
  
 

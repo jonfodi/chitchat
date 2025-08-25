@@ -25,8 +25,10 @@ class Validator:
 
 
 def run_validation_prompt(state: InputState) -> bool:
-    # Get the last user message using next() with a reversed generator expression
-    user_query = next((msg["content"] for msg in reversed(state["conversation"]) if msg["role"] == "user"), None)
+    # Get the last user message using next() with a reversed generator expressio
+    conversation_messages = state["conversation"]    
+    user_query = next((msg["content"] for msg in reversed(conversation_messages) if msg["role"] == "user"), None)
+
     if user_query is None:
         return False
     print(user_query)
