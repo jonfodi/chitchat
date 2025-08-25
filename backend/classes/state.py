@@ -22,8 +22,10 @@ from typing import TypedDict, NotRequired, Required, Dict, List, Any
 
 class InputState(TypedDict, total=False):
     conversation: List[Dict[str, Any]]
+    data: Dict[str, Any] # pass for now 
 
 
 class AnalysisState(InputState):
     conversation: List[Dict[str, Any]] # [{role: user, content: str}, {role: assistant, content: str}]
+    can_analyze: bool
 
