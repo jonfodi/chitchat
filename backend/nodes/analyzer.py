@@ -1,9 +1,8 @@
 
 import logging
 import dotenv
-from classes import AnalysisState
+from ..classes import InputState, AnalysisState
 from typing import Any, Dict
-from classes.state import InputState
 
 dotenv.load_dotenv()
 logger = logging.getLogger(__name__)
