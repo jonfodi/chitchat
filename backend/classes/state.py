@@ -12,11 +12,19 @@ from typing import TypedDict, NotRequired, Required, Dict, List, Any
 # then just need to figure out how to get the conversation working with this flow 
 # maybe its a conditional edge? 
 
+# first node = Validator 
+# uses LLM to analyze user query and determine if it is a valid query
+# you have access to this data. determine if you can answer the question or not
+# if you can, send the data to the next node 
+# if not, ask a clarifying question 
+# what is the problem here. its maintaing the conversation state. but do we even wanna keep it. 
+# yes we do. we need to store in DB 
 
 class InputState(TypedDict, total=False):
     user_query: str
+    conversation_id: str
 
 
 class AnalysisState(InputState):
-    messages: List[Dict[str, Any]] # [{role: user, content: str}, {role: assistant, content: str}]
+    conversation: List[Dict[str, Any]] # [{role: user, content: str}, {role: assistant, content: str}]
 

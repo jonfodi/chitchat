@@ -8,6 +8,10 @@ from datetime import datetime
 from pathlib import Path
 import json
 
+from collections import defaultdict
+from datetime import datetime
+
+
 app = FastAPI(title="Flight Data Processor", version="1.0.0")
 counter = 0
 # Enable CORS for Vue frontend
@@ -95,6 +99,36 @@ FIELD_INFO = {
     "I": {"description": "instance number", "units": "instance"},
     "Instance": {"description": "instance number", "units": "instance"},
 }
+
+conversations = defaultdict(lambda: {
+    "messages": [],
+    "created_at": datetime.now().isoformat(),
+    "updated_at": datetime.now().isoformat(),
+})
+
+
+@app.post("/api/chat")
+async def chat(data: ChatRequest):
+    conversation_id = data.conversation_id
+    user_query = data.user_query
+
+    # Safe fetch - returns None if doesn't exist
+    conversation = conversations.get(conversation_id)
+    
+    if conversation is None:
+        # Create new conversation explicitly
+        conversation = conversations[conversation_id]  
+        
+    # Add user message
+    conversation["messages"].append({
+        "role": "user", 
+        "content": user_query
+    })
+    
+    graph = Graph(
+        
+  
+    )
 
 def is_valid_message_type(msg_type: str) -> bool:
     """Check if message type is valid."""
@@ -260,9 +294,7 @@ async def process_flight_data(data: FlightDataRequest):
         print(f"ERROR processing flight data: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/api/chat")
-async def chat(data: ChatRequest):
-    pass
+
     
 
 @app.get("/api/health")

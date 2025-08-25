@@ -23,3 +23,5 @@ class FlightDataRequest(BaseModel):
     
 class ChatRequest(BaseModel):
     messages: List[Dict[str, Any]]
+    conversation_id: str
+    

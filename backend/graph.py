@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from langchain_core.messages import SystemMessage
 from langgraph.graph import StateGraph
@@ -11,17 +11,13 @@ from .nodes.validator import Validator
 logger = logging.getLogger(__name__)
 
 class Graph:
-    def __init__(self, shoe_type=None, size=None, budget=None, color=None, gender=None):
+    def __init__(self, conversation: List[Dict[str, Any]]):
         
         # Initialize InputState
         self.input_state = InputState(
-            shoe_type=shoe_type,
-            size=size,
-            budget=budget,
-            color=color,
-            gender=gender,
+            conversation = conversation,
             messages=[
-                SystemMessage(content="Expert shopper searching Nike")
+                SystemMessage(content="Expert flight data analyst")
             ]
         )
 
