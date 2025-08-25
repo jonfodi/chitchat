@@ -5,7 +5,7 @@ from langchain_core.messages import SystemMessage
 from langgraph.graph import StateGraph
 
 from .classes.state import InputState, AnalysisState
-from .nodes.receiver import Receiver
+from .nodes.analyzer import Analyzer, Receiver
 from .nodes.validator import Validator
 
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ class Graph:
         
         # Add nodes with their respective processing functions
         self.workflow.add_node("validator", self.validator.run)
-        seld.workflow.add_node(analyzer, self.analyzer.run)
+        self.workflow.add_node("analyzer", self.analyzer.run)
         # Set entry point
         self.workflow.set_entry_point("validator")
 
