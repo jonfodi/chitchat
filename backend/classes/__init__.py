@@ -1,3 +1,3 @@
-from .state import InputState, ShoppingState
+from .state import InputState, AnalysisState
 
-__all__ = ["InputState", "ShoppingState"] 
+__all__ = ["InputState", "AnalysisState"] 

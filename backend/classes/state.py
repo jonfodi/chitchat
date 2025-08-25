@@ -23,7 +23,7 @@ class InputState(TypedDict, total=False):
     budget: NotRequired[int]
     color: NotRequired[str]
 
-class ShoppingState(InputState):
+class AnalysisState(InputState):
     url: str
     shoe_data: Dict[str, Any]
     enhanced_shoe_data: Dict[str, Any]
