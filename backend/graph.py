@@ -36,7 +36,6 @@ class Graph:
     
     def _route_after_validation(self, state: AnalysisState) -> str:
         print("validating")
-        breakpoint()
         if state.get("can_analyze", False):
             return "analyzer"  # ← This string becomes the lookup key
         else:

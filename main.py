@@ -148,7 +148,8 @@ async def chat(request: ChatRequest):
     )
 
     # run agent
-    final_state = graph.run()
+    final_state = await graph.run()
+    breakpoint()
     return final_state
 
 def is_valid_message_type(msg_type: str) -> bool:
