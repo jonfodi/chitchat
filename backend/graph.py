@@ -43,14 +43,14 @@ class Graph:
         self.workflow.set_entry_point("validator")
 
         # Add conditional edge from validator
-        # self.workflow.add_conditional_edges(
-        #     "validator",  # source node
-        #     self.route_after_validation,  # router function
-        #     {
-        #         "analyzer": "analyzer",
-        #         "response_handler": "response_handler"
-        #     }
-        # )
+        self.workflow.add_conditional_edges(
+            "validator",  # source node
+            self.route_after_validation,  # router function
+            {
+                "analyzer": "analyzer",
+                "response_handler": "response_handler"
+            }
+        )
 
         # Both nodes can be terminal, so set multiple finish points
         self.workflow.set_finish_point("analyzer")

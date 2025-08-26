@@ -13,7 +13,7 @@ class Validator:
     def __init__(self): 
         self.openai_client = OpenAI()
 
-    def validate(self, state: InputState) -> Dict[str, Any]:
+    def validate(self, state: InputState) -> AnalysisState:
         user_query = get_last_user_message(state)
         can_analyze = run_validation_prompt(user_query)
 
@@ -21,7 +21,7 @@ class Validator:
         return state
 
 
-    def run(self, state: InputState) -> Dict[str, Any]:
+    def run(self, state: InputState) -> AnalysisState:
         return self.validate(state)
 
 
