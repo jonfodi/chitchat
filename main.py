@@ -116,6 +116,17 @@ def get_or_create_conversation(conversation_id: str):
         conversation = conversations[conversation_id]  
     return conversation
 
+def add_message_to_conversation(conversation: Dict[str, Any], user_query: str, role: str):
+
+        # Add user message
+    conversation["messages"].append({
+        "role": role, 
+        "content": user_query
+    })
+    
+    conversation["updated_at"] = datetime.now().isoformat()
+    return conversation
+
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
 
@@ -127,15 +138,12 @@ async def chat(request: ChatRequest):
     # retrieve conversation from DB 
     conversation = get_or_create_conversation(conversation_id)
     
-        
-    # Add user message
-    conversation["messages"].append({
-        "role": "user", 
-        "content": user_query
-    })
+    # add user message to conversation
+    conversation = add_message_to_conversation(conversation, user_query, "user")
+
     
     graph = Graph(
-        conversation = conversation["messages"],
+        conversation = conversation,
         data = {}
     )
     final_state = graph.run()
