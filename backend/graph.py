@@ -7,7 +7,7 @@ from langgraph.graph import StateGraph
 from .classes.state import InputState, AnalysisState
 from .nodes import Validator
 from .nodes.analyzer import Analyzer
-
+from .nodes.response_handler import ResponseHandler
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +31,9 @@ class Graph:
         """Initialize all workflow nodes"""
         self.validator = Validator()
         self.analyzer = Analyzer()
+        self.response_handler = ResponseHandler()
     
-    
+
  
     def _build_workflow(self):
         """Configure the state graph workflow"""
@@ -41,6 +42,7 @@ class Graph:
         # Add nodes with their respective processing functions
         self.workflow.add_node("validator", self.validator.run)
         self.workflow.add_node("analyzer", self.analyzer.run)
+        self.workflow.add_node("response_handler", self.response_handler.run)
         # Set entry point
         self.workflow.set_entry_point("validator")
 
@@ -56,7 +58,7 @@ class Graph:
 
         # Both nodes can be terminal, so set multiple finish points
         self.workflow.set_finish_point("analyzer")
-        # self.workflow.set_finish_point("response_handler")
+        self.workflow.set_finish_point("response_handler")
 
  
 

@@ -18,7 +18,8 @@ class Validator:
         can_analyze = run_validation_prompt(user_query)
 
         analysis_state = {
-            "can_analyze": can_analyze
+            "can_analyze": can_analyze,
+            "conversation": state["conversation"]
         }
 
         return analysis_state
