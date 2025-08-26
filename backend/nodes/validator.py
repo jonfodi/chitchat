@@ -30,8 +30,6 @@ class Validator:
 
 
 def run_validation_prompt(user_query: str) -> bool:
-    breakpoint()
-
 
     print(user_query)
     prompt = f"""
@@ -44,7 +42,7 @@ def run_validation_prompt(user_query: str) -> bool:
     The user query is:
     User query: {user_query}
     """
-    return True
+    return False
     try:
         client = OpenAI()
         response = client.chat.completions.create(
