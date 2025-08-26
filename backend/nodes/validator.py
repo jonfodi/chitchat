@@ -28,8 +28,6 @@ def run_validation_prompt(state: InputState) -> bool:
     breakpoint()
     user_query = get_last_user_message(state)
 
-    if user_query is None:
-        return False
     print(user_query)
     prompt = f"""
     You are a helpful assistant that validates user queries.
