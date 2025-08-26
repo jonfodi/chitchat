@@ -17,8 +17,11 @@ class Validator:
         user_query = get_last_user_message(state)
         can_analyze = run_validation_prompt(user_query)
 
-        state["can_analyze"] = can_analyze
-        return state
+        analysis_state = {
+            "can_analyze": can_analyze
+        }
+
+        return analysis_state
 
 
     def run(self, state: InputState) -> AnalysisState:

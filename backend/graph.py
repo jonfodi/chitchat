@@ -31,6 +31,8 @@ class Graph:
         """Initialize all workflow nodes"""
         self.validator = Validator()
         self.analyzer = Analyzer()
+    
+    
  
     def _build_workflow(self):
         """Configure the state graph workflow"""
