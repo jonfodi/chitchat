@@ -20,7 +20,9 @@ class FlightDataRequest(BaseModel):
         if not isinstance(v, dict):
             raise ValueError("messages must be a dictionary")
         return v
-    
+
+
+# input to the chat endpoint
 class ChatRequest(BaseModel):
     conversation_id: str
     user_query: str
