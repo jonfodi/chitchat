@@ -14,7 +14,8 @@ class Validator:
         self.openai_client = OpenAI()
 
     def validate(self, state: InputState) -> Dict[str, Any]:
-        can_analyze = run_validation_prompt(state)
+        user_query = get_last_user_message(state)
+        can_analyze = run_validation_prompt(user_query)
 
         state["can_analyze"] = can_analyze
         return state
@@ -24,9 +25,9 @@ class Validator:
         return self.validate(state)
 
 
-def run_validation_prompt(state: InputState) -> bool:
+def run_validation_prompt(user_query: str) -> bool:
     breakpoint()
-    user_query = get_last_user_message(state)
+
 
     print(user_query)
     prompt = f"""
