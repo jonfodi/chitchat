@@ -13,6 +13,7 @@ class Analyzer:
         pass
 
     def analyze(self, state: AnalysisState) -> Dict[str, Any]:
+        print("analyzing")
         return state
 
     def run(self, state: InputState) -> Dict[str, Any]:

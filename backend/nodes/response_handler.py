@@ -13,5 +13,9 @@ class ResponseHandler:
     def __init__(self): 
         self.openai_client = OpenAI()
     
-    def run(self, state: AnalysisState) -> Dict[str, Any]:
+    def handle_response(self, state: AnalysisState) -> Dict[str, Any]:
+        print("handling response")
         return state
+    
+    def run(self, state: AnalysisState) -> Dict[str, Any]:
+        return self.handle_response(state)

@@ -32,9 +32,16 @@ class Graph:
         self.validator = Validator()
         self.analyzer = Analyzer()
         self.response_handler = ResponseHandler()
+        self.route_after_validation = self._route_after_validation
     
-
- 
+    def _route_after_validation(self, state: AnalysisState) -> str:
+        print("validating")
+        breakpoint()
+        if state.get("can_analyze", False):
+            return "analyzer"  # ← This string becomes the lookup key
+        else:
+            return "response_handler"  # ← This string becomes the lookup key
+    
     def _build_workflow(self):
         """Configure the state graph workflow"""
         self.workflow = StateGraph(AnalysisState)
@@ -50,6 +57,8 @@ class Graph:
         self.workflow.add_conditional_edges(
             "validator",  # source node
             self.route_after_validation,  # router function
+            # dictionary mapping required by LangGraph API
+            # this says: when route_after_validation returns "analyzer", go to the analyzer node
             {
                 "analyzer": "analyzer",
                 "response_handler": "response_handler"
