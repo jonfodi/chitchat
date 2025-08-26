@@ -146,6 +146,8 @@ async def chat(request: ChatRequest):
         conversation = conversation,
         data = {}
     )
+
+    # run agent
     final_state = graph.run()
     return final_state
 
