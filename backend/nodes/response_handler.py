@@ -15,7 +15,11 @@ class ResponseHandler:
     
     def handle_response(self, state: AnalysisState) -> Dict[str, Any]:
         print("handling response")
-        return state
+
+        analysis_state = {
+            "clarification_question": "what u talkin bout willis",
+        }
+        return analysis_state
     
     def run(self, state: AnalysisState) -> Dict[str, Any]:
         return self.handle_response(state)

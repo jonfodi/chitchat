@@ -26,6 +26,7 @@ class InputState(TypedDict, total=False):
 
 
 class AnalysisState(InputState):
-    conversation: Dict[str, Any] #
+    conversation: Dict[str, Any] 
     can_analyze: bool
+    clarification_question: str
 
