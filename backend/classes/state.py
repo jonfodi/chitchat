@@ -26,6 +26,6 @@ class InputState(TypedDict, total=False):
 
 
 class AnalysisState(InputState):
-    conversation: List[Dict[str, Any]] # [{role: user, content: str}, {role: assistant, content: str}]
+    conversation: Dict[str, Any] #
     can_analyze: bool
 
