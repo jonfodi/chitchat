@@ -108,21 +108,25 @@ conversations = defaultdict(lambda: {
     "updated_at": datetime.now().isoformat(),
 })
 
+def get_or_create_conversation(conversation_id: str):
+    # Safe fetch - returns None if doesn't exist
+    conversation = conversations.get(conversation_id)
+    if conversation is None:
+        # Create new conversation explicitly
+        conversation = conversations[conversation_id]  
+    return conversation
 
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
 
-    # retriever conversation object from DB 
+    # retriever conversation ID from request 
     conversation_id = request.conversation_id
     # retrieve user query from request 
     user_query = request.user_query
 
-    # Safe fetch - returns None if doesn't exist
-    conversation = conversations.get(conversation_id)
+    # retrieve conversation from DB 
+    conversation = get_or_create_conversation(conversation_id)
     
-    if conversation is None:
-        # Create new conversation explicitly
-        conversation = conversations[conversation_id]  
         
     # Add user message
     conversation["messages"].append({
