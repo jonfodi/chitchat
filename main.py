@@ -220,6 +220,7 @@ async def process_flight_data(data: FlightDataRequest):
     print("=" * 50)
 
     try:
+        
         messages = data.messages
         # Process messages
         processed_data = process_flight_data(messages)

@@ -9,6 +9,16 @@ from ..services.utils import get_numeric_fields, get_field_info, get_message_des
 from ..services.utils import calculate_field_stats
 from ..services.utils import is_valid_message_type, is_valid_message_data
 
+def write_csv(filename: str, msg_data: Dict[str, Any]):
+    with open(filename, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+    
+        writer.writerow(msg_data.keys())
+    
+        for i in range(time_length):
+            row = [msg_data[field][i] for field in msg_data.keys()]
+            writer.writerow(row)
+
 def create_csv_for_message_type(msg_type: str, msg_data: Dict[str, Any], output_dir: Path, timestamp: str) -> str:
     """Export timeseries data for a message type to CSV."""
     filename = output_dir / f"timeseries_{msg_type.replace('[', '_').replace(']', '')}_{timestamp}.csv"
@@ -19,17 +29,10 @@ def create_csv_for_message_type(msg_type: str, msg_data: Dict[str, Any], output_
         field_name for field_name, field_data in msg_data.items()
         if isinstance(field_data, list) and len(field_data) == time_length
     ]
+
+    write_csv(filename, msg_data)
     
-    with open(filename, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        
-        # Write header
-        writer.writerow(valid_fields)
-        
-        # Write data rows
-        for i in range(time_length):
-            row = [msg_data[field][i] for field in valid_fields]
-            writer.writerow(row)
+
     
     return str(filename)
 
@@ -68,11 +71,10 @@ def create_message_metadata(msg_type: str, msg_data: Dict[str, Any]) -> Dict[str
     return metadata
 
 
-
 def process_flight_data(messages: Dict[str, Any]) -> Dict[str, Any]:
     """Process all valid messages and return metadata with CSV file paths."""
-    output_dir = create_output_dir()
     
+    output_dir = create_output_dir()
     for msg_type, msg_data in messages.items():
         if not is_valid_message_type(msg_type) or not is_valid_message_data(msg_data):
             print(f"Skipping message type '{msg_type}")
