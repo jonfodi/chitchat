@@ -3,6 +3,8 @@ from pathlib import Path
 from typing import Dict, Any
 from datetime import datetime
 
+from backend.utils.utils import create_output_dir
+
 from ..services.utils import get_numeric_fields, get_field_info, get_message_description
 from ..services.utils import calculate_field_stats
 from ..services.utils import is_valid_message_type, is_valid_message_data
@@ -65,11 +67,7 @@ def create_message_metadata(msg_type: str, msg_data: Dict[str, Any]) -> Dict[str
     
     return metadata
 
-def create_output_dir():
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_dir = Path("flight_data_exports")
-    output_dir.mkdir(exist_ok=True)
-    return output_dir
+
 
 def process_messages(messages: Dict[str, Any]) -> Dict[str, Any]:
     """Process all valid messages and return metadata with CSV file paths."""
