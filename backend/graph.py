@@ -4,10 +4,10 @@ from typing import Any, Dict, List
 from langchain_core.messages import SystemMessage
 from langgraph.graph import StateGraph
 
-from .classes.state import InputState, AnalysisState
-from .nodes import Validator
-from .nodes.analyzer import Analyzer
-from .nodes.response_handler import ResponseHandler
+from classes.state import InputState, AnalysisState
+from nodes import Validator
+from nodes.analyzer import Analyzer
+from nodes.response_handler import ResponseHandler
 
 logger = logging.getLogger(__name__)
 

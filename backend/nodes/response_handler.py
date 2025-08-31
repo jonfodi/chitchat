@@ -3,7 +3,7 @@ import dotenv
 from openai import OpenAI
 
 
-from ..classes import AnalysisState
+from classes import AnalysisState
 from typing import Any, Dict
 
 dotenv.load_dotenv()

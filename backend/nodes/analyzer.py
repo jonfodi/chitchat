@@ -1,7 +1,7 @@
 
 import logging
 import dotenv
-from ..classes import InputState, AnalysisState
+from classes import InputState, AnalysisState
 from typing import Any, Dict
 
 dotenv.load_dotenv()

@@ -1,12 +1,12 @@
 # main.py - FastAPI backend to receive flight data
-from backend.services.data_processor import process_flight_data
+from services.data_processor import process_flight_data
 import uvicorn
 import csv
-from backend.graph import Graph
+from graph import Graph
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from backend.models import FlightDataRequest, ChatRequest
+from models import FlightDataRequest, ChatRequest
 from typing import Dict, Any, List
 from datetime import datetime
 from pathlib import Path
@@ -222,6 +222,7 @@ async def process_flight_data(data: FlightDataRequest):
     try:
         
         messages = data.messages
+        breakpoint()
         # Process messages
         processed_data = process_flight_data(messages)
         # Export metadata to JSON
