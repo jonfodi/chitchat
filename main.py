@@ -108,6 +108,11 @@ conversations = defaultdict(lambda: {
     "updated_at": datetime.now().isoformat(),
 })
 
+data = defaultdict(lambda: {
+    "timestamp": [],
+    "data": {}
+})
+
 def get_or_create_conversation(conversation_id: str):
     # Safe fetch - returns None if doesn't exist
     conversation = conversations.get(conversation_id)
@@ -141,7 +146,10 @@ async def chat(request: ChatRequest):
     # add user message to conversation
     conversation = add_message_to_conversation(conversation, user_query, "user")
 
+    data = get_or_cre
+
     
+    # rename to something more in line with use case
     graph = Graph(
         conversation = conversation,
         data = {}
