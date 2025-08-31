@@ -1,6 +1,8 @@
 # main.py - FastAPI backend to receive flight data
+import uvicorn
 import csv
 from backend.graph import Graph
+
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -325,8 +327,6 @@ async def process_flight_data(data: FlightDataRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-    
-
 @app.get("/api/health")
 async def health_check():
     return {"status": "healthy", "message": "Flight data processor is running"}
@@ -336,5 +336,4 @@ async def root():
     return {"message": "Flight Data Processor API", "docs": "/docs"}
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -36,7 +36,7 @@ def run_validation_prompt(user_query: str) -> bool:
     You are a helpful assistant that validates user queries.
     You need to determine if the user query is respondable given the data. 
 
-    The data is:
+    The data is: 
 
 
     The user query is:

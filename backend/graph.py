@@ -68,7 +68,6 @@ class Graph:
         self.workflow.set_finish_point("analyzer")
         self.workflow.set_finish_point("response_handler")
 
- 
 
     def run(self) -> Dict[str, Any]:
         """Execute the workflow synchronously"""
