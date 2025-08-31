@@ -220,15 +220,11 @@ async def process_flight_data(data: FlightDataRequest):
     print("=" * 50)
 
     try:
-
         messages = data.messages
-        
         # Process messages
         processed_data = process_messages(messages)
-        
         # Export metadata to JSON
         json_filename = export_metadata_to_json(processed_data)
-
         return True
         
     except Exception as e:

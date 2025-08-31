@@ -64,12 +64,16 @@ def create_message_metadata(msg_type: str, msg_data: Dict[str, Any]) -> Dict[str
     }
     
     return metadata
-            
-def process_messages(messages: Dict[str, Any]) -> Dict[str, Any]:
-    """Process all valid messages and return metadata with CSV file paths."""
+
+def create_output_dir():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_dir = Path("flight_data_exports")
     output_dir.mkdir(exist_ok=True)
+    return output_dir
+
+def process_messages(messages: Dict[str, Any]) -> Dict[str, Any]:
+    """Process all valid messages and return metadata with CSV file paths."""
+    output_dir = create_output_dir()
     
     for msg_type, msg_data in messages.items():
         if not is_valid_message_type(msg_type) or not is_valid_message_data(msg_data):
