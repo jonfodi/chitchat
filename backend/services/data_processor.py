@@ -78,10 +78,7 @@ def create_csvs_for_message_types(messages: Dict[str, Any]) -> Dict[str, Any]:
 
 
     for msg_type, msg_data in messages.items():
-        if not is_data_time_series(msg_data):
-            print(f"Skipping message type '{msg_type}")
-            continue
-        
+
         # Export timeseries to CSV
         csv_filename = create_csv_for_message_type(msg_type, msg_data, output_dir, timestamp)
 
