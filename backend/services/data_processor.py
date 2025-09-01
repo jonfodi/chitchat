@@ -78,7 +78,7 @@ def create_csvs_for_message_types(messages: Dict[str, Any]) -> Dict[str, Any]:
 
 
     for msg_type, msg_data in messages.items():
-        if not is_message_type_to_process(msg_type) or not is_data_time_series(msg_data):
+        if not is_data_time_series(msg_data):
             print(f"Skipping message type '{msg_type}")
             continue
         

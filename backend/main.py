@@ -243,12 +243,36 @@ def remove_none_fields(flight_data: dict) -> dict:
     
     return cleaned_data
 
+def remove_non_time_series_fields(cleaned_data: dict) -> dict:
+    """
+    Remove all fields from cleaned_data that are not time series data.
+    Keeps only message types that contain 'time_boot_ms' field with valid data.
+    
+    Args:
+        cleaned_data: Dictionary containing flight data
+        
+    Returns:
+        Dictionary containing only time series message types
+    """
+    time_series_data = {}
+    
+    for key, value in cleaned_data.items():
+        if is_data_time_series(value):
+            time_series_data[key] = value
+    
+    return time_series_data
+
+
+def is_data_time_series(msg_data: Any) -> bool:
+    """Check if message data is valid time series data."""
+    return (
+        isinstance(msg_data, dict) and 
+        'time_boot_ms' in msg_data and 
+        isinstance(msg_data['time_boot_ms'], list) and 
+        len(msg_data['time_boot_ms']) > 0
+    )
 @app.post("/api/process-flight-data")
 async def process_flight_data(request: FlightDataRequest):
-   
-    print("=" * 50)
-    print("PROCESSING FLIGHT DATA")
-    print("=" * 50)
 
     try:
         flight_data = request.messages 
@@ -258,16 +282,12 @@ async def process_flight_data(request: FlightDataRequest):
         #     }
         # }
 
-
-        breakpoint()
         filtered_data = remove_unused_message_types(flight_data)
         cleaned_data = remove_none_fields(filtered_data)
+        time_series_data = remove_non_time_series_fields(cleaned_data)
 
-        breakpoint()
+        processed_data = create_csvs_for_message_types(time_series_data)
 
-        processed_data = create_csvs_for_message_types(cleaned_data)
-        # Export metadata to JSON
-        # json_data = 
         json_filename = export_metadata_to_json(processed_data)
         return True
         
