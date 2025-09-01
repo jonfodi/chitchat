@@ -4,6 +4,10 @@ from typing import Dict, Any
 from datetime import datetime
 
 from utils.utils import create_output_dir
+from utils.utils import is_message_type_to_process
+from utils.utils import is_data_time_series
+
+
 
 
 def write_csv(filename: str, msg_data: Dict[str, Any]):
@@ -29,7 +33,6 @@ def create_csv_for_message_type(msg_type: str, msg_data: Dict[str, Any], output_
 
     write_csv(filename, msg_data)
     
-
     
     return str(filename)
 
@@ -73,10 +76,9 @@ def process_flight_data(messages: Dict[str, Any]) -> Dict[str, Any]:
     
     output_dir = create_output_dir()
 
-    
+
     for msg_type, msg_data in messages.items():
-        breakpoint()
-        if not is_valid_message_type(msg_type) or not is_valid_message_data(msg_data):
+        if not is_message_type_to_process(msg_type) or not is_data_time_series(msg_data):
             print(f"Skipping message type '{msg_type}")
             continue
         
