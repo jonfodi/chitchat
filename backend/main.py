@@ -162,11 +162,11 @@ async def chat(request: ChatRequest):
     breakpoint()
     return final_state
 
-def is_valid_message_type(msg_type: str) -> bool:
+def is_message_type_to_process(msg_type: str) -> bool:
     """Check if message type is valid."""
     return msg_type in ALLOWED_MESSAGE_TYPES
 
-def is_valid_message_data(msg_data: Any) -> bool:
+def is_data_time_series(msg_data: Any) -> bool:
     """Check if message data is valid."""
     return (
         isinstance(msg_data, dict) and 
@@ -213,18 +213,23 @@ def get_field_info(field_name: str) -> Dict[str, str]:
 
 
 @app.post("/api/process-flight-data")
-async def process_flight_data(data: FlightDataRequest):
+async def process_flight_data(request: FlightDataRequest):
    
     print("=" * 50)
     print("PROCESSING FLIGHT DATA")
     print("=" * 50)
 
     try:
-        
-        messages = data.messages
+        flight_data = request.messages 
+        # data_structure = {
+        #     "message_type": { CMD, AHR2, etc.
+        #         "field_name": [values], time_boot_ms,  Yaw, Pitch, etc. 
+        #     }
+        # }
+
         breakpoint()
         # Process messages
-        processed_data = process_flight_data(messages)
+        processed_data = process_flight_data(flight_data)
         # Export metadata to JSON
         json_filename = export_metadata_to_json(processed_data)
         return True

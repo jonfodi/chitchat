@@ -14,7 +14,6 @@ class AllowedMessagTypes(str, Enum):
 class FlightDataRequest(BaseModel):
     messages: Dict[str, Any]
 
-
     @field_validator('messages')
     def validate_messages(cls, v):
         if not isinstance(v, dict):

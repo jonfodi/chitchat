@@ -72,7 +72,10 @@ def process_flight_data(messages: Dict[str, Any]) -> Dict[str, Any]:
     """Process all valid messages and return metadata with CSV file paths."""
     
     output_dir = create_output_dir()
+
+    
     for msg_type, msg_data in messages.items():
+        breakpoint()
         if not is_valid_message_type(msg_type) or not is_valid_message_data(msg_data):
             print(f"Skipping message type '{msg_type}")
             continue
