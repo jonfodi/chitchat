@@ -71,7 +71,7 @@ def create_message_metadata(msg_type: str, msg_data: Dict[str, Any]) -> Dict[str
     return metadata
 
 
-def process_flight_data(messages: Dict[str, Any]) -> Dict[str, Any]:
+def create_csvs_for_message_types(messages: Dict[str, Any]) -> Dict[str, Any]:
     """Process all valid messages and return metadata with CSV file paths."""
     
     output_dir = create_output_dir()

@@ -1,5 +1,5 @@
 # main.py - FastAPI backend to receive flight data
-from services.data_processor import process_flight_data
+from services.data_processor import create_csvs_for_message_types
 import uvicorn
 import csv
 from graph import Graph
@@ -215,9 +215,11 @@ async def process_flight_data(request: FlightDataRequest):
         # }
 
         breakpoint()
-        # Process messages
-        processed_data = process_flight_data(flight_data)
+        
+
+        processed_data = create_csvs_for_message_types(flight_data)
         # Export metadata to JSON
+        json_data = 
         json_filename = export_metadata_to_json(processed_data)
         return True
         
