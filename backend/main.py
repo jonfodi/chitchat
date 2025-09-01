@@ -199,6 +199,50 @@ def get_field_info(field_name: str) -> Dict[str, str]:
     })
 
 
+def remove_unused_message_types(flight_data: dict) -> dict:
+    """
+    Filter flight data to keep only CMD, AHR2, ATT, and POS message types.
+    
+    Args:
+        flight_data: Dictionary containing flight data with message types as keys
+        
+    Returns:
+        Filtered dictionary containing only the specified message types
+    """
+    # Define the keys to keep (case-insensitive matching)
+    keys_to_keep = {'CMD', 'AHR2', 'ATT', 'POS'}
+    
+    # Filter the dictionary, keeping only specified keys
+    filtered_data = {
+        key: value for key, value in flight_data.items() 
+        if key.upper() in keys_to_keep
+    }
+            # Write filtered_data to test.txt
+    with open("test.txt", "w") as f:
+            print(filtered_data, file=f)
+    return filtered_data
+
+def remove_none_fields(flight_data: dict) -> dict:
+
+    cleaned_data = {}
+    
+    for key, value in flight_data.items():
+        if isinstance(value, dict):
+            # Remove fields where all list values are None
+            filtered_fields = {
+                field_name: field_values 
+                for field_name, field_values in value.items()
+                if not (isinstance(field_values, list) and 
+                       all(v is None for v in field_values))
+            }
+            if filtered_fields:  # Only add if there are remaining fields
+                cleaned_data[key] = filtered_fields
+        else:
+            # Keep non-dict values as they are
+            cleaned_data[key] = value
+    
+    return cleaned_data
+
 @app.post("/api/process-flight-data")
 async def process_flight_data(request: FlightDataRequest):
    
@@ -214,12 +258,16 @@ async def process_flight_data(request: FlightDataRequest):
         #     }
         # }
 
-        breakpoint()
-        
 
-        processed_data = create_csvs_for_message_types(flight_data)
+        breakpoint()
+        filtered_data = remove_unused_message_types(flight_data)
+        cleaned_data = remove_none_fields(filtered_data)
+
+        breakpoint()
+
+        processed_data = create_csvs_for_message_types(cleaned_data)
         # Export metadata to JSON
-        json_data = 
+        # json_data = 
         json_filename = export_metadata_to_json(processed_data)
         return True
         
