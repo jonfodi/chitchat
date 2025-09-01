@@ -4,37 +4,7 @@ from typing import Dict, Any
 from datetime import datetime
 
 from utils.utils import create_output_dir
-from utils.utils import is_message_type_to_process
-from utils.utils import is_data_time_series
 
-
-
-
-def write_csv(filename: str, msg_data: Dict[str, Any]):
-    with open(filename, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-    
-        writer.writerow(msg_data.keys())
-    
-        for i in range(time_length):
-            row = [msg_data[field][i] for field in msg_data.keys()]
-            writer.writerow(row)
-
-def create_csv_for_message_type(msg_type: str, msg_data: Dict[str, Any], output_dir: Path, timestamp: str) -> str:
-    """Export timeseries data for a message type to CSV."""
-    filename = output_dir / f"timeseries_{msg_type.replace('[', '_').replace(']', '')}_{timestamp}.csv"
-    
-    # Get all fields with same length as time data
-    time_length = len(msg_data['time_boot_ms'])
-    valid_fields = [
-        field_name for field_name, field_data in msg_data.items()
-        if isinstance(field_data, list) and len(field_data) == time_length
-    ]
-
-    write_csv(filename, msg_data)
-    
-    
-    return str(filename)
 
 def create_message_metadata(msg_type: str, msg_data: Dict[str, Any]) -> Dict[str, Any]:
     """Create metadata for a message type without timeseries data."""
@@ -70,21 +40,28 @@ def create_message_metadata(msg_type: str, msg_data: Dict[str, Any]) -> Dict[str
     
     return metadata
 
+def write_csv(filename: str, msg_data: Dict[str, Any]):
+    with open(filename, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+    
+        writer.writerow(msg_data.keys())
+    
+        time_length = len(msg_data['time_boot_ms'])
+        for i in range(time_length):
+            row = [msg_data[field][i] for field in msg_data.keys()]
+            writer.writerow(row)
 
-def create_csvs_for_message_types(messages: Dict[str, Any]) -> Dict[str, Any]:
+def create_csvs(messages: Dict[str, Any]) -> Dict[str, Any]:
     """Process all valid messages and return metadata with CSV file paths."""
     
     output_dir = create_output_dir()
 
-
     for msg_type, msg_data in messages.items():
-
-        # Export timeseries to CSV
-        csv_filename = create_csv_for_message_type(msg_type, msg_data, output_dir, timestamp)
-
-        # Create metadata (without timeseries)
-        processed_data["message_types"][msg_type] = create_message_metadata(msg_type, msg_data)
         
+        csv_filename = output_dir / f"timeseries_{msg_type.replace('[', '_').replace(']', '')}.csv"
+
+        write_csv(csv_filename, msg_data)
+
         print(f"Processed {msg_type}: {len(msg_data['time_boot_ms'])} data points -> {csv_filename}")
     
-    return processed_data
+    return True
