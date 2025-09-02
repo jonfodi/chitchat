@@ -29,6 +29,7 @@ def create_csvs(messages: Dict[str, Any]) -> Dict[str, Any]:
         csv_filename = output_dir / f"timeseries_{msg_type.replace('[', '_').replace(']', '')}.csv"
 
         write_csv(csv_filename, msg_data)
+        breakpoint()
 
         print(f"Processed {msg_type}: {len(msg_data['time_boot_ms'])} data points -> {csv_filename}")
     
