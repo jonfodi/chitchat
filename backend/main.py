@@ -146,7 +146,13 @@ def add_message_to_conversation(conversation: Dict[str, Any], user_query: str, r
 
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
-
+    print(dict(message_type_data))
+    if "CMD" in message_type_data and message_type_data["CMD"]["csv_file_path"]:
+        cmd_csv_path = message_type_data["CMD"]["csv_file_path"]
+        print(f"CMD CSV file path: {cmd_csv_path}")
+    else:
+        print("CMD CSV file path not available yet")
+    breakpoint()
     # retriever conversation ID from request 
     conversation_id = request.conversation_id
     # retrieve user query from request 
@@ -314,7 +320,7 @@ async def process_flight_data(request: FlightDataRequest):
         breakpoint()
 
         output_dir = create_csvs(time_series_data)
-        saved_csvs = save_csvs(output_dir, time_series_data)
+        saved_csvs = save_csvs(time_series_data)
 
         # json_filename = export_metadata_to_json(processed_data)
         return True
