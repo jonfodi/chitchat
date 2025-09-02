@@ -112,7 +112,7 @@ conversations = defaultdict(lambda: {
 })
 
 telemetry_data = defaultdict(lambda: {
-    "id": str(uuid.uuid4()),
+    "id": "",
     "raw_payload": {},
     "created_at": datetime.now().isoformat(),
 })
@@ -120,9 +120,9 @@ telemetry_data = defaultdict(lambda: {
 message_type_data = defaultdict(lambda: {
     "created_at": datetime.now().isoformat(),
     "raw_payload": {}, # foreign key to telemetry_data
-    "csv_file_path": {},
-    "json_file_path": {},
-    "message_type": {} # enum (CMD, AHR2, ATT, POS, etc.)
+    "csv_file_path": "",
+    "json_file_path": "",
+    "message_type": "" # enum (CMD, AHR2, ATT, POS, etc.)
 })
 
 def get_or_create_conversation(conversation_id: str):
@@ -208,7 +208,6 @@ def get_field_info(field_name: str) -> Dict[str, str]:
         "units": "unknown"
     })
 
-
 def remove_unused_message_types(flight_data: dict) -> dict:
     """
     Filter flight data to keep only CMD, AHR2, ATT, and POS message types.
@@ -253,7 +252,6 @@ def remove_none_fields(flight_data: dict) -> dict:
     
     return cleaned_data
 
-
 def remove_non_time_series_fields(cleaned_data: dict) -> dict:
     """
     Remove all fields from cleaned_data that are not time series data.
@@ -273,7 +271,6 @@ def remove_non_time_series_fields(cleaned_data: dict) -> dict:
     
     return time_series_data
 
-
 def has_values_for_each_time_point(msg_data: dict) -> bool:
     """Check that all list fields have the same length as time data."""
     time_length = len(msg_data['time_boot_ms'])
@@ -285,7 +282,6 @@ def has_values_for_each_time_point(msg_data: dict) -> bool:
     
     return True
 
-
 def is_data_time_series(msg_data: Any) -> bool:
     """Check if message data is valid time series data."""
     return (isinstance(msg_data, dict) and 
@@ -293,13 +289,15 @@ def is_data_time_series(msg_data: Any) -> bool:
             isinstance(msg_data['time_boot_ms'], list) and 
             len(msg_data['time_boot_ms']) > 0)
 
-
-def save_csvs(output_dir: str, time_series_data: dict):
+def save_csvs(time_series_data: dict):
     # save csv files to message_type_data
     # csv_filename = output_dir / f"timeseries_{data_type.replace('[', '_').replace(']', '')}.csv"
     for data_type in time_series_data.keys():
         csv_filename = csv_file_path(data_type)
         message_type_data[data_type]["csv_file_path"] = csv_filename
+        print(f"Saved CSV file: {csv_filename}")
+        print(message_type_data)
+
     return message_type_data
 
 
@@ -315,6 +313,7 @@ async def process_flight_data(request: FlightDataRequest):
         filtered_data = remove_unused_message_types(flight_data)
         cleaned_data = remove_none_fields(filtered_data)
         time_series_data = remove_non_time_series_fields(cleaned_data)
+        breakpoint()
 
         output_dir = create_csvs(time_series_data)
         saved_csvs = save_csvs(output_dir, time_series_data)
