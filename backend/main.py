@@ -1,5 +1,5 @@
 # main.py - FastAPI backend to receive flight data
-from services.csv_service import create_csvs, csv_file_path
+from services.csv_service import create_csvs, get_csv_file_path
 import uvicorn
 import csv
 from graph import Graph
@@ -290,10 +290,8 @@ def is_data_time_series(msg_data: Any) -> bool:
             len(msg_data['time_boot_ms']) > 0)
 
 def save_csvs(time_series_data: dict):
-    # save csv files to message_type_data
-    # csv_filename = output_dir / f"timeseries_{data_type.replace('[', '_').replace(']', '')}.csv"
     for data_type in time_series_data.keys():
-        csv_filename = csv_file_path(data_type)
+        csv_filename = get_csv_file_path(data_type)
         message_type_data[data_type]["csv_file_path"] = csv_filename
         print(f"Saved CSV file: {csv_filename}")
         print(message_type_data)
