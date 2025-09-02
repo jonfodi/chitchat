@@ -11,6 +11,7 @@ from typing import Dict, Any, List
 from datetime import datetime
 from pathlib import Path
 import json
+import uuid
 
 from collections import defaultdict
 from datetime import datetime
@@ -110,9 +111,18 @@ conversations = defaultdict(lambda: {
     "updated_at": datetime.now().isoformat(),
 })
 
-data = defaultdict(lambda: {
-    "timestamp": [],
-    "data": {}
+telemetry_data = defaultdict(lambda: {
+    "id": str(uuid.uuid4()),
+    "raw_payload": {},
+    "created_at": datetime.now().isoformat(),
+})
+
+message_type_data = defaultdict(lambda: {
+    "created_at": datetime.now().isoformat(),
+    "raw_payload": {}, # foreign key to telemetry_data
+    "csv_file_path": {},
+    "json_file_path": {},
+    "message_type": {} # enum (CMD, AHR2, ATT, POS, etc.)
 })
 
 def get_or_create_conversation(conversation_id: str):
@@ -284,9 +294,13 @@ def is_data_time_series(msg_data: Any) -> bool:
             len(msg_data['time_boot_ms']) > 0)
 
 
+def save_csvs(output_dir: str):
+    # 
+    return create_csvs(output_dir)
+
+
 @app.post("/api/process-flight-data")
 async def process_flight_data(request: FlightDataRequest):
-
     try:
         flight_data = request.messages 
         # data_structure = {
@@ -294,12 +308,12 @@ async def process_flight_data(request: FlightDataRequest):
         #         "field_name": [values], time_boot_ms,  Yaw, Pitch, etc. 
         #     }
         # }
-
         filtered_data = remove_unused_message_types(flight_data)
         cleaned_data = remove_none_fields(filtered_data)
         time_series_data = remove_non_time_series_fields(cleaned_data)
 
-        processed_data = create_csvs(time_series_data)
+        output_dir = create_csvs(time_series_data)
+        saved_csvs = save_csvs(output_dir)
 
         # json_filename = export_metadata_to_json(processed_data)
         return True

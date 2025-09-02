@@ -5,9 +5,6 @@ from datetime import datetime
 
 from utils.utils import create_output_dir
 
-
-
-
 def write_csv(filename: str, telemetry_record  : Dict[str, Any]):
     with open(filename, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
@@ -24,4 +21,4 @@ def create_csvs(time_series_data: Dict[str, Any]) -> Dict[str, Any]:
         write_csv(csv_filename, telemetry_records)
         print(f"Processed {data_type}: {len(telemetry_records['time_boot_ms'])} data points -> {csv_filename}")
     
-    return True
+    return output_dir
