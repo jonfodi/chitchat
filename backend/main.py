@@ -1,5 +1,5 @@
 # main.py - FastAPI backend to receive flight data
-from services.csv_service import create_csvs
+from services.csv_service import create_csvs, csv_file_path
 import uvicorn
 import csv
 from graph import Graph
@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 import json
 import uuid
-
+    
 from collections import defaultdict
 from datetime import datetime
 
@@ -294,9 +294,13 @@ def is_data_time_series(msg_data: Any) -> bool:
             len(msg_data['time_boot_ms']) > 0)
 
 
-def save_csvs(output_dir: str):
-    # 
-    return create_csvs(output_dir)
+def save_csvs(output_dir: str, time_series_data: dict):
+    # save csv files to message_type_data
+    # csv_filename = output_dir / f"timeseries_{data_type.replace('[', '_').replace(']', '')}.csv"
+    for data_type in time_series_data.keys():
+        csv_filename = csv_file_path(data_type)
+        message_type_data[data_type]["csv_file_path"] = csv_filename
+    return message_type_data
 
 
 @app.post("/api/process-flight-data")
@@ -313,7 +317,7 @@ async def process_flight_data(request: FlightDataRequest):
         time_series_data = remove_non_time_series_fields(cleaned_data)
 
         output_dir = create_csvs(time_series_data)
-        saved_csvs = save_csvs(output_dir)
+        saved_csvs = save_csvs(output_dir, time_series_data)
 
         # json_filename = export_metadata_to_json(processed_data)
         return True

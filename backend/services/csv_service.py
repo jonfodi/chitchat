@@ -5,6 +5,9 @@ from datetime import datetime
 
 from utils.utils import create_output_dir
 
+def csv_file_path(data_type: str) -> str:
+    return f"timeseries_{data_type.replace('[', '_').replace(']', '')}.csv"
+
 def write_csv(filename: str, telemetry_record  : Dict[str, Any]):
     with open(filename, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
